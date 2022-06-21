@@ -1,4 +1,18 @@
-export interface ITraktList {
+export interface ITraktResponse {
+  lists?: ITraktResponseList[];
+  listMovieItems?: ITraktResponseListMovieItem[];
+  movies?: ITraktResponseMovie[];
+  releases?: ITraktResponseRelease[];
+
+  error?: {
+    id: string;
+    message: string;
+  };
+
+  [propName: string]: any;
+}
+
+export interface ITraktResponseList {
   name: string;
   description: string;
   privacy: TraktListPrivacy;
@@ -16,6 +30,55 @@ export interface ITraktList {
     trakt: number;
     slug: string;
   };
+}
+
+export interface ITraktResponseListMovieItem {
+  rank: number;
+  id: number;
+  listed_at: string;
+  notes: string;
+  type: string;
+  movie: ITraktResponseMovie;
+}
+
+export interface ITraktResponseMovie {
+  title: string;
+  year: number;
+  ids: {
+    trakt: number;
+    slug: string;
+    imdb: string;
+    tmdb: number;
+  };
+  tagline: string;
+  overview: string;
+  released: string | null;
+  runtime: number;
+  country: string;
+  trailer: string;
+  homepage: string;
+  status: string;
+  rating: number;
+  votes: number;
+  comment_count: number;
+  updated_at: string;
+  language: string;
+  available_translations: string[];
+  genres: string[];
+  certification: string;
+}
+
+export interface ITraktResponseRelease {
+  country: string;
+  certification: string | null;
+  release_date: string;
+  release_type: string;
+  note: number | null;
+}
+
+export interface ITraktResponseAlias {
+  title: string;
+  country: string;
 }
 
 export enum TraktListPrivacy {
@@ -46,50 +109,6 @@ export enum TraktListSortBy {
 export enum TraktListSortHow {
   ASC = "asc",
   DESC = "desc",
-}
-
-export interface ITraktListMovieItem {
-  rank: number;
-  id: number;
-  listed_at: string;
-  notes: string;
-  type: string;
-  movie: ITraktMovie;
-}
-
-export interface ITraktMovie {
-  title: string;
-  year: number;
-  ids: {
-    trakt: number;
-    slug: string;
-    imdb: string;
-    tmdb: number;
-  };
-  tagline: string;
-  overview: string;
-  released: string | null;
-  runtime: number;
-  country: string;
-  trailer: string;
-  homepage: string;
-  status: string;
-  rating: number;
-  votes: number;
-  comment_count: number;
-  updated_at: string;
-  language: string;
-  available_translations: string[];
-  genres: string[];
-  certification: string;
-}
-
-export interface ITraktRelease {
-  country: string;
-  certification: string | null;
-  release_date: string;
-  release_type: string;
-  note: number | null;
 }
 
 export enum TraktMediaExtendedInfo {

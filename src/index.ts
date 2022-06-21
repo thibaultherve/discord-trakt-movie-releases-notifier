@@ -17,6 +17,7 @@ async function main() {
       await TaskManager.execute(argv.group as TaskGroup, argv, database);
     }
   } catch (error) {
+    console.log(error);
     logger.error(error);
   } finally {
     await database.close();

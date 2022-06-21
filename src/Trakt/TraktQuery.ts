@@ -5,6 +5,13 @@ export class TraktQuery {
   private _path: string[] = [];
   private _parameters: Map<string, string> = new Map();
 
+  get collectionName(): string {
+    if (this._path.length === 0) {
+      throw new Error("Cannot get collection name from an empty path.");
+    }
+    return this._path[this._path.length - 1];
+  }
+
   public endpoint(endpoint: string): TraktQuery {
     this._endpoint = endpoint;
     return this;
@@ -41,6 +48,11 @@ export class TraktQuery {
     if (countryCode !== undefined) {
       this.addPath(`${countryCode}`);
     }
+    return this;
+  }
+
+  public aliases(): TraktQuery {
+    this.addPath("aliases");
     return this;
   }
 

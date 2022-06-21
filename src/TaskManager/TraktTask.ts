@@ -11,7 +11,6 @@ export class TraktTask extends Task {
 
   constructor(args: IArgv, database: Database) {
     super(args, database);
-
     this._repository = new TraktRepository(database);
   }
 

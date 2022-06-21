@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { delay } from "../Utils";
 import { Logger } from "../Utils/Logger";
+import { ITraktResponse } from "./ITraktResponse";
 import { TraktQuery } from "./TraktQuery";
 
 const logger = Logger.getLogger();
@@ -37,22 +38,34 @@ export class Trakt {
     return new TraktQuery();
   }
 
-  public async get(url: string): Promise<AxiosResponse> {
-    //await delay(100);
+  public async collection(query: TraktQuery): Promise<any[]> {
+    const collection: any[] = [];
+    const results: ITraktResponse = await this.get(query.toQueryString());
+    collection.push(...(results as any));
+    return collection;
+  }
 
+  public async get(url: string): Promise<ITraktResponse> {
     logger.debug(`Fetching ${url}...`);
 
-    try {
-      const response = await axios.get<AxiosResponse>(url, this._requestConfig);
+    let data: ITraktResponse;
 
-      return response;
+    try {
+      const response = await axios.get<ITraktResponse>(url, this._requestConfig);
+
+      data = response.data;
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        //console.log(error.);
-        throw new Error(`Trakt API error : ${error.response?.status} ${error.response?.statusText}.`);
+      if (error.response && error.response.data) {
+        data = error.response.data;
       } else {
         throw new Error(error);
       }
     }
+
+    if (data.error) {
+      throw new Error(`Trakt API error : ${data.error.id} (${data.error.message})`);
+    }
+
+    return data;
   }
 }

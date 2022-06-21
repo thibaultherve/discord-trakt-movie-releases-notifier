@@ -16,6 +16,11 @@ export class NotifyTask extends Task {
     super(args, database);
 
     this._repository = new TraktRepository(database);
+
+    if (args.release === undefined) {
+      throw new Error("Argument : release-type must be defined if group is notify.");
+    }
+
     this._release = args.release;
   }
 
