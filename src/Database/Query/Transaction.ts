@@ -24,7 +24,6 @@ export default class Transaction {
     try {
       result = await body();
     } catch (error: any) {
-      console.log(error);
       logger.error(`Error in transaction body, rolling back...`);
 
       try {

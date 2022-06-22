@@ -13,8 +13,8 @@ export default class InsertMovie extends InsertionQuery {
 
   public call(): Promise<InsertionResult> {
     return this.database.db.run(SQL`
-    INSERT INTO trakt_movies (id, title, year)
-    VALUES (${this._data.id},
+    INSERT INTO trakt_movies (trakt_movie_id, title, year)
+    VALUES (${this._data.trakt_movie_id},
             ${this._data.title},
             ${this._data.year})
     `) as Promise<InsertionResult>;

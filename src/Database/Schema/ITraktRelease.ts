@@ -7,4 +7,4 @@ export default interface ITraktRelease {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ITraktReleaseInsert extends Omit<ITraktRelease, "certification"> {}
+export interface ITraktReleaseInsert extends ITraktRelease {}

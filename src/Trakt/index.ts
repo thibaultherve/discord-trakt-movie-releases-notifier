@@ -1,5 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { delay } from "../Utils";
+import axios, { AxiosRequestConfig } from "axios";
 import { Logger } from "../Utils/Logger";
 import { ITraktResponse } from "./ITraktResponse";
 import { TraktQuery } from "./TraktQuery";

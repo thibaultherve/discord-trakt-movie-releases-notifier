@@ -15,7 +15,7 @@ const argv = yargs
   })
   .check((argv) => {
     if (argv.group == "notify" && argv["release-type"] === undefined) {
-      throw new Error("Argument : release-type must be defined if group is notify.");
+      throw new Error("Argument : --release-type must be defined if --group is : notify.");
     } else {
       return true;
     }
@@ -34,7 +34,7 @@ const argv = yargs
 export interface IArgv {
   config?: string;
   group: string;
-  release?: Release;
+  release: Release;
 }
 
 export class ArgvHelper {
@@ -42,7 +42,7 @@ export class ArgvHelper {
     return {
       config: argv["config" as keyof typeof argv] as string,
       group: argv["group" as keyof typeof argv] as string,
-      release: argv["release" as keyof typeof argv] as Release,
+      release: argv["release-type" as keyof typeof argv] as Release,
     };
   }
 }

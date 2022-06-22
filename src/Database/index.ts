@@ -40,6 +40,7 @@ export default class Database {
       PRAGMA synchronous = normal;
       PRAGMA temp_store = memory;
       PRAGMA mmap_size = 30000000000;
+      PRAGMA foreign_keys = ON;
     `);
 
     // Run pending migrations, if any.

@@ -3,7 +3,7 @@ import { ITraktReleaseInsert } from "./ITraktRelease";
 import { ITraktAliasInsert } from "./ITraktAlias";
 
 export default interface ITraktMovie extends IFormattable {
-  id: number;
+  trakt_movie_id: number;
   title: string;
   year: number;
 }

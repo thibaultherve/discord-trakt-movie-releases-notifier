@@ -3,6 +3,7 @@ import { IArgv } from "../Utils/ArgvHelper";
 import { Task } from "./Task";
 import { NotifyTask } from "./NotifyTask";
 import { TraktTask } from "./TraktTask";
+import DeleteRecordsTask from "./DeleteRecordsTask";
 
 export enum TaskGroup {
   TASK_GROUP_TRAKT = "trakt",
@@ -11,7 +12,7 @@ export enum TaskGroup {
 
 export class TaskManager {
   private static TASKS_BY_GROUP: ReadonlyMap<TaskGroup, { new (args: IArgv, database: Database): Task }[]> = new Map([
-    [TaskGroup.TASK_GROUP_TRAKT, [TraktTask]],
+    [TaskGroup.TASK_GROUP_TRAKT, [DeleteRecordsTask, TraktTask]],
     [TaskGroup.TASK_GROUP_NOTIFY, [NotifyTask]],
   ]);
 

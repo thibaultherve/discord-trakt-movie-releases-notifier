@@ -63,9 +63,7 @@ export class TraktProcessor {
     let movies: ITraktResponseMovie[] = [];
 
     for (const list of this._lists) {
-      const actualMovieIds = movies.map((movie) => {
-        return movie.ids.trakt;
-      });
+      const actualMovieIds = movies.map((movie) => movie.ids.trakt);
 
       const foundedMoviesItems = await this.getMoviesItemsFromList(list);
       const foundedMovies = foundedMoviesItems.map((movieItem) => movieItem.movie);
@@ -96,9 +94,8 @@ export class TraktProcessor {
       throw new Error("Cannot get releases if movies are not available.");
     }
 
-    this._rawMovies = this._rawMovies.filter((movie) => this.isReleasedLessThanThreeYearAgo(movie));
-    this._rawMovies = this._rawMovies.slice(0, 2);
-
+    this._rawMovies = this._rawMovies.filter((movie) => this.isReleasedLessThanOneYearAgo(movie));
+    this._rawMovies = this._rawMovies.slice(0, 20);
     const movies: ITraktMovieInsert[] = [];
 
     for (const rawMovie of this._rawMovies) {
@@ -119,6 +116,7 @@ export class TraktProcessor {
     const releases = rawReleases.map<ITraktReleaseInsert>((release) => {
       return {
         country: release.country,
+        certification: release.certification,
         release_date: release.release_date,
         release_type: release.release_type,
         note: release.note,
@@ -133,7 +131,7 @@ export class TraktProcessor {
     });
 
     return {
-      id: movie.ids.trakt,
+      trakt_movie_id: movie.ids.trakt,
       title: movie.title,
       year: movie.year,
       releases,
@@ -155,8 +153,8 @@ export class TraktProcessor {
     return await this._trakt.collection(query);
   }
 
-  private isReleasedLessThanThreeYearAgo(movie: ITraktResponseMovie): boolean {
+  private isReleasedLessThanOneYearAgo(movie: ITraktResponseMovie): boolean {
     if (movie.year === null) return true;
-    return this._now.year() - movie.year <= 3;
+    return this._now.year() - movie.year <= 1;
   }
 }

@@ -1,35 +1,31 @@
-import moment from "moment";
 import Database from "../Database";
 import TraktRepository from "../Database/Repository/TraktRepository";
-import { NotifyProcessor } from "../Processors/NotifyProcessor";
-import { TraktProcessor } from "../Processors/TraktProcessor";
+import DiscordNotifier from "../DiscordNotifier";
 
 import { IArgv } from "../Utils/ArgvHelper";
-import { Release } from "../Utils/Constants";
+import { Constants, Release } from "../Utils/Constants";
 import { Task } from "./Task";
 
 export class NotifyTask extends Task {
   private readonly _repository: TraktRepository;
   private readonly _release: Release;
-
+  private readonly _country: string;
   constructor(args: IArgv, database: Database) {
     super(args, database);
 
-    this._repository = new TraktRepository(database);
-
-    if (args.release === undefined) {
-      throw new Error("Argument : release-type must be defined if group is notify.");
+    if (Constants.TRAKT_COUNTRY === undefined) {
+      throw new Error("Language must be defined.");
     }
 
+    this._repository = new TraktRepository(database);
+    this._country = Constants.TRAKT_COUNTRY;
     this._release = args.release;
   }
 
   public async execute(): Promise<void> {
-    await this.processData();
-  }
-
-  private async processData(): Promise<void> {
-    const processor = new NotifyProcessor(this.database, this._release);
-    await processor.process();
+    const data = await this._repository.moviesAggregate(this._release, this._country);
+    console.log(data);
+    const discordWebhook = new DiscordNotifier(this._release, data);
+    discordWebhook.sendMessage();
   }
 }
